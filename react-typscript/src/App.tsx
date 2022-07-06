@@ -60,6 +60,8 @@ function App() {
         type: "ADD",
         text: newTodoRef.current.value,
       });
+
+      newTodoRef.current.value = "";
     }
   }, []);
   return (
