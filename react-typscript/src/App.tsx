@@ -1,9 +1,14 @@
-import { useCallback, useState, useEffect, useReducer, useRef } from "react";
+import React, {
+  useCallback,
+  useState,
+  useEffect,
+  useReducer,
+  useRef,
+} from "react";
 import Heading from "./Heading";
 import Box from "./Box";
 import List from "./List";
 import "./App.css";
-import { type } from "os";
 
 interface Payload {
   text: string;
@@ -17,6 +22,13 @@ type ActionType =
   | { type: "ADD"; text: string }
   | { type: "REMOVE"; id: number };
 
+const Incrementer: React.FunctionComponent<{
+  value: number;
+  setValue: React.Dispatch<React.SetStateAction<number>>;
+}> = ({ value, setValue }) => (
+  <button onClick={() => setValue(value + 1)}>Add {value}</button>
+);
+
 function App() {
   const onListClick = useCallback((item: string) => {
     alert(item);
@@ -25,6 +37,7 @@ function App() {
   // how to write useState with typescript
   // the | allows us to take in the payload or null
   const [payload, setPayload] = useState<Payload | null>(null);
+  const [value, setValue] = useState(0);
 
   useEffect(() => {
     fetch("/data.json")
@@ -82,6 +95,9 @@ function App() {
       ))}
       <input type='text' ref={newTodoRef} />
       <button onClick={onAddTodo}>Add Todo</button>
+
+      <Heading title='Incrementer' />
+      <Incrementer value={value} setValue={setValue} />
     </div>
   );
 }
