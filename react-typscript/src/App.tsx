@@ -10,6 +10,8 @@ import Box from "./Box";
 import List from "./List";
 import "./App.css";
 
+// to check type: command k then command i
+
 interface Payload {
   text: string;
 }
@@ -22,9 +24,17 @@ type ActionType =
   | { type: "ADD"; text: string }
   | { type: "REMOVE"; id: number };
 
+// creating a custom hook to for creating a set state with a number value:
+const useNumber = (initialValue: number) => useState<number>(initialValue);
+
+// getting types from use number:
+type UseNumberValue = ReturnType<typeof useNumber>[0];
+type UseNumberSetValue = ReturnType<typeof useNumber>[1];
+
+// using those types to set state:
 const Incrementer: React.FunctionComponent<{
-  value: number;
-  setValue: React.Dispatch<React.SetStateAction<number>>;
+  value: UseNumberValue;
+  setValue: UseNumberSetValue;
 }> = ({ value, setValue }) => (
   <button onClick={() => setValue(value + 1)}>Add {value}</button>
 );
@@ -36,8 +46,9 @@ function App() {
 
   // how to write useState with typescript
   // the | allows us to take in the payload or null
+  // payload is taking from a fetch
   const [payload, setPayload] = useState<Payload | null>(null);
-  const [value, setValue] = useState(0);
+  const [value, setValue] = useNumber(0);
 
   useEffect(() => {
     fetch("/data.json")
